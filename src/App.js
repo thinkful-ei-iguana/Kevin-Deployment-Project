@@ -10,9 +10,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchThrough: "",
-      searchFor: "",
-      results: ""
+      searchThrough: null,
+      searchFor: null,
+      results: null
     }
   }
 
@@ -29,7 +29,10 @@ export default class App extends React.Component {
   }
 
   fetchResults = function() {
-    const fetchUrl = `https://swapi.co/api/${this.state.searchThrough}${this.state.searchFor}`
+    let fetchUrl;
+    if(this.state.searchFor !== null && this.state.searchThrough === null) {
+      fetchUrl=`https://swapi.co/api/`
+    }
     return fetch(fetchUrl, { methd: "GET" })
       .then(response => {
         if(!response.ok) {
@@ -47,18 +50,22 @@ export default class App extends React.Component {
   render() {
 
     const contextValue = {
-      addResult: this.fetchResults
+      addResult: this.fetchResults,
+      addSearch: this.setSearchFor,
+      addFilter: this.setSearchThrough
     }
 
     return (
-      <main className='App'>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={HomeView} />
+      <Context.Provider value={contextValue}>
+        <main className='App'>
+          <Header />
+          <Switch>
+            <Route exact path="/" component={HomeView} />
 
-          <Route component={NotFound} />
-        </Switch>
-      </main>
+            <Route component={NotFound} />
+          </Switch>
+        </main>
+      </Context.Provider>
     )
 
   }

@@ -1,26 +1,39 @@
 import React from 'react';
+import Context from '../Context';
 
 export default class SearchForm extends React.Component {
+    state = {
+        query: "",
+        filter: ""
+    }
 
-    validateSearchThrough = () => {
-        const searching = this.state.searchThrough.trim();
+    static contextType = Context;
+
+    validateQuery = () => {
+        const searching = this.state.query.trim();
         if (searching.length === 0) {
             return "Please select a search filter."
         }
     }
 
-    validateSearchFor = () => {
-        const query = this.state.searchFor.trim();
+    validateFilter = () => {
+        const query = this.state.filter.trim();
         if (query.length === 0) {
             return "Please enter a search term."
         }
     }
 
     render() {
+
+        const { addResult } = this.context;
+        const { addSearch } = this.context;
+        const { addFilter } = this.context;
+
         return(
             <form 
                 onSubmit={event => {
                     event.preventDefault();
+                    addResult(this.state);
                 }}
             >
                 <label htmlFor="search-term">
@@ -30,7 +43,7 @@ export default class SearchForm extends React.Component {
                     type="text"
                     id="search-term"
                     onChange={event => {
-                        this.setSearchFor(event.target.value)
+                        addSearch(event.target.value)
                     }}
                     required
                 />
@@ -40,7 +53,7 @@ export default class SearchForm extends React.Component {
                 <select
                     id="search-filter"
                     onChange={event => {
-                        this.setSearchThrough(event.target.value)
+                        addFilter(event.target.value)
                     }}
                 >
                     <option value="">Everything</option>
