@@ -1,0 +1,15 @@
+{
+    "version": 2,
+    "alias": "sw-deployment-app",
+    "name": "sw-deployment-test",
+    "routes": [
+        {
+          "src": "^/static/(.*)",
+          "dest": "/static/$1"
+        },
+        {
+          "src": ".*",
+          "dest": "/index.html"
+        }
+    ]
+  }
