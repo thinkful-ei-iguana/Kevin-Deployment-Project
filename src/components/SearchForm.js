@@ -1,22 +1,6 @@
 import React from 'react';
 
 export default class SearchForm extends React.Component {
-    state = {
-        searchThrough: "",
-        searchFor: ""
-    };
-
-    setSearchThrough = (select) => {
-        this.setState({
-            searchThrough: select
-        })
-    }
-
-    setSearchFor = (query) => {
-        this.setState({
-            searchFor: query
-        })
-    }
 
     validateSearchThrough = () => {
         const searching = this.state.searchThrough.trim();
@@ -58,7 +42,6 @@ export default class SearchForm extends React.Component {
                     onChange={event => {
                         this.setSearchThrough(event.target.value)
                     }}
-                    required
                 >
                     <option value="">Everything</option>
                     <option value="films">Films</option>
