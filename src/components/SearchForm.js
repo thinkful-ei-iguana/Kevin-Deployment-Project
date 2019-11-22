@@ -9,11 +9,23 @@ export default class SearchForm extends React.Component {
 
     static contextType = Context;
 
+    updateQuery = (newQuery) => {
+        this.setState({
+            query: newQuery
+        })
+    }
+
     validateQuery = () => {
         const searching = this.state.query.trim();
         if (searching.length === 0) {
             return "Please select a search filter."
         }
+    }
+
+    updateFilter = (newFilter) => {
+        this.setState({
+            filter: newFilter
+        })
     }
 
     validateFilter = () => {
@@ -25,15 +37,15 @@ export default class SearchForm extends React.Component {
 
     render() {
 
-        const { addResult } = this.context;
         const { addSearch } = this.context;
         const { addFilter } = this.context;
+        const { addUrl } = this.context;
 
         return(
             <form 
                 onSubmit={event => {
-                    event.preventDefault();
-                    addResult(this.state);
+                    event.preventDefault()
+                    addUrl(this.state.filter, this.state.query)
                 }}
             >
                 <label htmlFor="search-term">
@@ -43,6 +55,7 @@ export default class SearchForm extends React.Component {
                     type="text"
                     id="search-term"
                     onChange={event => {
+                        this.updateQuery(event.target.value)
                         addSearch(event.target.value)
                     }}
                     required
@@ -53,6 +66,7 @@ export default class SearchForm extends React.Component {
                 <select
                     id="search-filter"
                     onChange={event => {
+                        this.updateFilter(event.target.value)
                         addFilter(event.target.value)
                     }}
                 >

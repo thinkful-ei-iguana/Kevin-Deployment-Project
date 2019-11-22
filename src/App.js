@@ -12,7 +12,8 @@ export default class App extends React.Component {
     this.state = {
       searchThrough: null,
       searchFor: null,
-      results: null
+      results: null,
+      url: null
     }
   }
 
@@ -28,12 +29,20 @@ export default class App extends React.Component {
     })
   }
 
-  fetchResults = function() {
-    let fetchUrl;
-    if(this.state.searchFor !== null && this.state.searchThrough === null) {
-      fetchUrl=`https://swapi.co/api/`
-    }
-    return fetch(fetchUrl, { methd: "GET" })
+  setResult = (results) => {
+    this.setState({
+      results: results
+    })
+  }
+
+  setUrl = (filter, query) => {
+    this.setState({
+      url: `https://swapi.co/api/${filter}/${query}`
+    })
+  }
+
+  fetchResults = function(url) {
+    return fetch(url, { methd: "GET" })
       .then(response => {
         if(!response.ok) {
           console.log("An error has occured");
@@ -50,9 +59,9 @@ export default class App extends React.Component {
   render() {
 
     const contextValue = {
-      addResult: this.fetchResults,
       addSearch: this.setSearchFor,
-      addFilter: this.setSearchThrough
+      addFilter: this.setSearchThrough,
+      addUrl: this.setUrl
     }
 
     return (
