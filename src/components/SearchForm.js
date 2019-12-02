@@ -40,12 +40,15 @@ export default class SearchForm extends React.Component {
         const { addSearch } = this.context;
         const { addFilter } = this.context;
         const { addUrl } = this.context;
+        const { fetch } = this.context;
+        const { url } = this.context;
 
         return(
             <form 
                 onSubmit={event => {
                     event.preventDefault()
                     addUrl(this.state.filter, this.state.query)
+                    fetch(url)
                 }}
             >
                 <label htmlFor="search-term">
@@ -69,8 +72,9 @@ export default class SearchForm extends React.Component {
                         this.updateFilter(event.target.value)
                         addFilter(event.target.value)
                     }}
+                    required
                 >
-                    <option value="">Everything</option>
+                    <option value="">Choose one</option>
                     <option value="films">Films</option>
                     <option value="people">People</option>
                     <option value="planets">Planets</option>

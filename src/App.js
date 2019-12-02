@@ -12,7 +12,7 @@ export default class App extends React.Component {
     this.state = {
       searchThrough: null,
       searchFor: null,
-      results: null,
+      results: [],
       url: null
     }
   }
@@ -31,18 +31,18 @@ export default class App extends React.Component {
 
   setResult = (results) => {
     this.setState({
-      results: results
+      results: [...this.state.results, ...results]
     })
   }
 
   setUrl = (filter, query) => {
     this.setState({
-      url: `https://swapi.co/api/${filter}/${query}`
+      url: `https://swapi.co/api/${filter}/:${query}`
     })
   }
 
-  fetchResults = function(url) {
-    return fetch(url, { methd: "GET" })
+  fetchResults = (url) => {
+    return fetch(url, { method: "GET" })
       .then(response => {
         if(!response.ok) {
           console.log("An error has occured");
@@ -50,18 +50,21 @@ export default class App extends React.Component {
         } return response;
       })
       .then(response => response.json())
-      .then(response => this.setState({results: response}))
+      .then(response => this.setResult((response)))
       .catch(err => {
         console.log("Handling error:", err)
-      })
-  }
+      });
+  };
 
   render() {
 
     const contextValue = {
       addSearch: this.setSearchFor,
       addFilter: this.setSearchThrough,
-      addUrl: this.setUrl
+      addUrl: this.setUrl,
+      fetch: this.fetchResults,
+      url: this.state.url,
+      results: this.state.results
     }
 
     return (
@@ -70,7 +73,6 @@ export default class App extends React.Component {
           <Header />
           <Switch>
             <Route exact path="/" component={HomeView} />
-
             <Route component={NotFound} />
           </Switch>
         </main>
