@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link} from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import './App.css';
 import Context from './Context';
 import Header from './components/Header';
@@ -10,23 +10,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchThrough: null,
-      searchFor: null,
       results: [],
       url: null
     }
-  }
-
-  setSearchThrough = (select) => {
-    this.setState({
-        searchThrough: select
-    })
-  }
-
-  setSearchFor = (query) => {
-    this.setState({
-        searchFor: query
-    })
   }
 
   setResult = (results) => {
@@ -35,9 +21,17 @@ export default class App extends React.Component {
     })
   }
 
-  setUrl = (filter, query) => {
+  clearState = () => {
     this.setState({
-      url: `https://swapi.co/api/${filter}/:${query}`
+      results: [],
+      url: null
+    })
+  }
+
+  setUrl = (filter, query) => {
+    const searchUrl = `https://swapi.co/api/${filter}/?=${query}`
+    this.setState({
+      url: searchUrl
     })
   }
 
@@ -59,12 +53,9 @@ export default class App extends React.Component {
   render() {
 
     const contextValue = {
-      addSearch: this.setSearchFor,
-      addFilter: this.setSearchThrough,
-      addUrl: this.setUrl,
-      fetch: this.fetchResults,
-      url: this.state.url,
-      results: this.state.results
+      results: this.state.results,
+      clear: this.clearState,
+      api: this.fetchResults
     }
 
     return (

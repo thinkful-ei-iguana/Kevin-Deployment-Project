@@ -1,12 +1,9 @@
 import React from 'react';
 
 const Context = React.createContext({
-    addSearch: function() {},
-    addFilter: function() {},
-    addUrl: function() {},
-    fetch: function() {},
-    url: "",
-    results: []
+    results: [],
+    clear: function() {},
+    api: function() {}
 })
 
 export default Context

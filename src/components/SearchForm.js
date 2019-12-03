@@ -2,11 +2,13 @@ import React from 'react';
 import Context from '../Context';
 
 export default class SearchForm extends React.Component {
-    state = {
-        query: "",
-        filter: ""
+    constructor(props) {
+        super(props);
+        this.state = {
+            query: "",
+            filter: ""
+        }
     }
-
     static contextType = Context;
 
     updateQuery = (newQuery) => {
@@ -35,21 +37,24 @@ export default class SearchForm extends React.Component {
         }
     }
 
-    render() {
+    handleSubmit = event => {
+        event.preventDefault();
+        this.context.clear();
+        this.context.api(
+            this.state.filter.value,
+            this.state.query.value
+        )
+        this.setState({
+            query: "",
+            filter: ""
+        })
+    }
 
-        const { addSearch } = this.context;
-        const { addFilter } = this.context;
-        const { addUrl } = this.context;
-        const { fetch } = this.context;
-        const { url } = this.context;
+    render() {
 
         return(
             <form 
-                onSubmit={event => {
-                    event.preventDefault()
-                    addUrl(this.state.filter, this.state.query)
-                    fetch(url)
-                }}
+                onSubmit={event => this.handleSubmit(event)}
             >
                 <label htmlFor="search-term">
                     Search the galaxy: 
@@ -59,7 +64,6 @@ export default class SearchForm extends React.Component {
                     id="search-term"
                     onChange={event => {
                         this.updateQuery(event.target.value)
-                        addSearch(event.target.value)
                     }}
                     required
                 />
@@ -70,7 +74,6 @@ export default class SearchForm extends React.Component {
                     id="search-filter"
                     onChange={event => {
                         this.updateFilter(event.target.value)
-                        addFilter(event.target.value)
                     }}
                     required
                 >

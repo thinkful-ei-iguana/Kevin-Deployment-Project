@@ -1,21 +1,17 @@
 import React from 'react';
-import Context from '../Context';
 import SearchForm from './SearchForm';
-import Results from './Results';
+import ResultDisplay from './ResultDisplay';
 
-export default class HomeView extends React.Component {
-    static contextType = Context;
+export default function HomePage(props) {
     
-    render() {
-        return(
-            <div className="wrapper">
-                <section>
-                    <SearchForm />
-                </section>
-                <section>
-                    <Results />
-                </section>
-            </div>
-        )
-    }
+    return(
+        <div className="wrapper">
+            <section>
+                <SearchForm />
+            </section>
+            <section>
+                <ResultDisplay />
+            </section>
+        </div>
+    )
 }
