@@ -11,51 +11,51 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       results: [],
-      url: null
     }
   }
 
   setResult = (results) => {
-    this.setState({
-      results: [...this.state.results, ...results]
-    })
+    console.log(results)
+    this.setState(prevState => ({
+      results: [...prevState.results, results]
+    }))    
   }
 
   clearState = () => {
     this.setState({
       results: [],
-      url: null
-    })
-  }
-
-  setUrl = (filter, query) => {
-    const searchUrl = `https://swapi.co/api/${filter}/?=${query}`
-    this.setState({
-      url: searchUrl
     })
   }
 
   fetchResults = (url) => {
-    return fetch(url, { method: "GET" })
+    fetch(url, { method: "GET" })
       .then(response => {
+        console.log(response)
         if(!response.ok) {
           console.log("An error has occured");
           throw new Error ("Please try again.")
-        } return response;
+        } return response.json();
       })
-      .then(response => response.json())
-      .then(response => this.setResult((response)))
+      .then(response => {
+        console.log(response)
+        let jsonResponse = response
+        console.log(jsonResponse)
+        return jsonResponse.results
+      })
+      .then(response => {
+        this.setResult((response))
+      })
       .catch(err => {
         console.log("Handling error:", err)
       });
   };
 
   render() {
-
+    console.log(this.state.results)
     const contextValue = {
       results: this.state.results,
       clear: this.clearState,
-      api: this.fetchResults
+      api: this.fetchResults,
     }
 
     return (

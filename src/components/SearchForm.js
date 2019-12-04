@@ -6,7 +6,9 @@ export default class SearchForm extends React.Component {
         super(props);
         this.state = {
             query: "",
-            filter: ""
+            filter: "",
+            url: "",
+            results: []
         }
     }
     static contextType = Context;
@@ -37,13 +39,17 @@ export default class SearchForm extends React.Component {
         }
     }
 
+    setUrl = (filter, query) => {
+        const searchUrl = `https://swapi.co/api/${filter}/?=${query}`
+        this.setState({
+          url: searchUrl
+        })
+      }
+
     handleSubmit = event => {
         event.preventDefault();
-        this.context.clear();
-        this.context.api(
-            this.state.filter.value,
-            this.state.query.value
-        )
+        this.setUrl(this.state.filter, this.state.query)
+        this.context.api(this.state.url)
         this.setState({
             query: "",
             filter: ""
